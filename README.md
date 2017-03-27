@@ -1,18 +1,18 @@
-#Generative Adversarial Nets
+# Adversarial Nets
 
 GAN
 --------
-**The beginning. **
+**The beginning.**
 The first paper. 
 
 Two main research direction:
 1. stabilize the training
-2. 
+2. apply GAN
 #### paper
 [Generative Adversarial Nets] 
 
-- **Loss ** :
-$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))] $$
+- **Loss** :
+$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$
 
 #### blog
 [[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory) 
@@ -23,10 +23,10 @@ $$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  
  
 DCGAN
 --------
-**stabilize the training with some architectural constraints.**
-GAN is hard to train. 
-Stabilize Generative Adversarial networks with some architectural constraints.
-Popular used in cv. Most used architecture.
+**stabilize the training with some architectural constraints.**  
+GAN is hard to train.   
+Stabilize Generative Adversarial networks with some architectural constraints.  
+Popular used in cv. Most used architecture.  
 
 #### paper
 [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks]
@@ -68,18 +68,18 @@ Popular used in cv. Most used architecture.
 Conditional GAN
 --------
 **Apply GAN by adding condition(supervised)**
-Add conditions to GAN by feeding y to G. 
-G(z)-->G(z,y)  D(X)-->D(X,y)
-- z: the same as in GAN. unconstrained noise to generate a image.
-- y: the condition to constraint the network. supervised.
-A very important structure that used in image applications (data augmentation, image transfer, etc.) 
-Make GAN useful. 
+Add conditions to GAN by feeding y to G.   
+G(z)-->G(z,y)  D(X)-->D(X,y)  
+- z: the same as in GAN. unconstrained noise to generate a image.  
+- y: the condition to constraint the network. supervised.  
+A very important structure that used in image applications (data augmentation, image transfer, etc.)   
+Make GAN useful.   
 
 #### paper
 [Conditional Generative Adversarial Nets]
 
-- **Loss ** :
-$$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))] $$
+- **Loss** :
+$$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))]$$
 
 #### blog
 [[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)
@@ -111,8 +111,8 @@ $$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y
 Wasserstein GAN
 --------
 **stabilize the training by using Wasserstein-1 distance**
-GAN before using JS divergence has the problem of non-overlapping, leading to mode collapse and convergence difficulty. 
-Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above without particular architecture (like dcgan). 
+GAN before using JS divergence has the problem of non-overlapping, leading to mode collapse and convergence difficulty.   
+Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above without particular architecture (like dcgan).   
 
 #### paper
 [Wasserstein GAN]
@@ -150,17 +150,19 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 InfoGAN
 --------
 **Apply GAN by learning conditions(unsupervised)**
-Attempt to make conditional learned automatically. Find and control some useful information in the images.
+Attempt to make conditional learned automatically. Find and control some useful information in the images.  
 
-- z: the same as in GAN. unconstrainted noise to generate a image.
-- c: like c in conditional GAN, but learned by Q instead of given what that is, unsupervised.
+- z: the same as in GAN. unconstrainted noise to generate a image.  
+- c: like c in conditional GAN, but learned by Q instead of given what that is, unsupervised.  
 
 #### paper
 [InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets]
 
-- **Loss ** :
+- **Loss** :
 $$\min_{G} \max_{D} V_I(D,G) = V(D,G) - \lambda I(c;G(z,c))$$
+
 Define: $Q(c|x)$ to approximate $P(c|x)$, (which is the conditional distribution)
+
 $$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$
 
 #### blog
@@ -180,7 +182,8 @@ activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Ber
 > Solver: 
 > Adam beta1=0.5 stepG:stepD=1:1 
 
-*my understanding: Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q var and G var by Q:D:G=2:1:1*
+*my understanding*: 
+> Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q var and G var by Q:D:G=2:1:1
 
 [[wiseodd/infogan-tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/infogan/infogan_tensorflow.py)(also simple, use mlp)
 > Q: fc --> softmax with c (not share with D)  update vars: G and Q
@@ -189,24 +192,24 @@ activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Ber
 
 
 # Others
-Tensorflow style: https://www.tensorflow.org/community/style_guide
-tf.concat(1,[x,y]) in tf 0.12- --->  tf.concat([x,y],1) in tf 1.0+.
-use tf.get_Variable or tf.contrib.layers to reuse variables.
-weights_initializer=tf.random_normal_initializer(0, 0.02) will converge faster
+Tensorflow style: https://www.tensorflow.org/community/style_guide  
+tf.concat(1,[x,y]) in tf 0.12- --->  tf.concat([x,y],1) in tf 1.0+.  
+use tf.get_Variable or tf.contrib.layers to reuse variables.  
+weights_initializer=tf.random_normal_initializer(0, 0.02) will converge faster.  
 
 # My Implementation
-> Enveriment:
+Enveriment:
 > python 2.7. tensorflow 1.0.
 
 
-** DCGAN **
+**DCGAN**
 
 - [x] conv
 
 Note:
 > The final layer can be sigmoid(data: [0,1]) or tanh(data:[-1,1])
 
-** Conditional GAN **
+**Conditional GAN**
 
 - [x] condition + mlp `D:G = 1:1`
 - [x] condition + conv(dcgan)  `D:G=1:1 faster than mlp`
@@ -217,12 +220,12 @@ Note:
 > The step ratio of G and D is very important and it takes some time to reach the balance. Condition+mlp with D:G = 2:1 works badly.
 
 
-** Wasserstein GAN **
+**Wasserstein GAN**
 
 - [ ] wgan + dcgan
 
 
-** InfoGAN **
+**infoGAN**
 
 - [x] conditional + mlp D and Q not share 
 - [ ] conditional + mlp
