@@ -217,37 +217,24 @@ $$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$
 
 ### code
 [[openai/infogan]](https://github.com/openai/InfoGAN)( star 300+,  hard to read and modify, too much files)  
-> G: fc(1024 bn relu)-->fc (bn relu) reshape--> deconv bn relu --> deconv flatten--> activate
+> G: fc(1024 bn relu)-->fc (bn relu) reshape--> deconv bn relu --> deconv flatten--> activate  
+> D and Q:   
+> shared: reshape-->conv lrelu --> conv bn lrelu --> fc bn lrelu   
+> D: fc(1) --> activate  
+> Q: fc(128) bn lrelu --> fc (c_dim) --> activate    
+> activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Bernoulli)  
+> Losses:   
+> D and G: sigmoid as DCGAN   
+> Q: cross entropy loss (softmax for discrete) ** add Q loss to D and G loss **  
+> Solver:   
+> Adam beta1=0.5 stepG:stepD=1:1   
 
-> D and Q: 
-
-> shared: reshape-->conv lrelu --> conv bn lrelu --> fc bn lrelu 
-
-> D: fc(1) --> activate
-
-> Q: fc(128) bn lrelu --> fc (c_dim) --> activate  
-
-> activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Bernoulli)
-
-> Losses: 
-
-> D and G: sigmoid as DCGAN 
-
-> Q: cross entropy loss (softmax for discrete) ** add Q loss to D and G loss **
-
-> Solver: 
-
-> Adam beta1=0.5 stepG:stepD=1:1 
-
-*my understanding*: 
-
-> Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q(D) var and G var by Q:D:G=2:1:1
+*my understanding*:   
+> Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q(D) var and G var by Q:D:G=2:1:1  
 
 [[wiseodd/infogan-tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/infogan/infogan_tensorflow.py)(also simple, use mlp)  
-> Q: fc --> softmax with c (not share with D)  update vars: G and Q
-
-> Solver: Adam G:D:Q = 1:1:1
-
+> Q: fc --> softmax with c (not share with D)  update vars: G and Q  
+> Solver: Adam G:D:Q = 1:1:1  
 
 
 
