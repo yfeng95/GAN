@@ -113,9 +113,9 @@ Popular used in cv. Most used architecture.
 
  ***************
  
-:sparkles:Conditional GAN
+:sparkles:Conditional GAN  
 --------
-**Apply GAN by adding condition(supervised)**
+**Apply GAN by adding condition(supervised)**  
 Add conditions to GAN by feeding y to G.   
 G(z)-->G(z,y)  D(X)-->D(X,y)  
 - z: the same as in GAN. unconstrained noise to generate a image.  
@@ -127,7 +127,7 @@ Make GAN useful.
 [Conditional Generative Adversarial Nets]
 
 - **Loss** :
-$$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))]$$
+$$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))]$$  
 
 ### blog
 [[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)  
@@ -158,14 +158,14 @@ $$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y
 
 :sparkles:Wasserstein GAN
 --------
-**stabilize the training by using Wasserstein-1 distance**
+**stabilize the training by using Wasserstein-1 distance**  
 GAN before using JS divergence has the problem of non-overlapping, leading to mode collapse and convergence difficulty.   
 Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above without particular architecture (like dcgan).   
 
 ### paper
 [Wasserstein GAN]
 
-**Algorithm guidelines for stable GANs**
+**Algorithm guidelines for stable GANs**  
 
 * No log in the loss. The output of D is no longer a probability, hence we do not apply sigmoid at the output of D
 * Clip the weight of D (0.01)
@@ -176,7 +176,7 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 ### blog
 [[AidenN/WassersteinGAN]](https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7)  (Theory)  
 [[wiseodd/wasserstein-gan]](http://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/)  (Introduction, Implementation)  
-[[zhihu/Wassertein GAN]](https://zhuanlan.zhihu.com/p/25071913)   (Introduction, Analysis)
+[[zhihu/Wassertein GAN]](https://zhuanlan.zhihu.com/p/25071913)   (Introduction, Analysis)  
 
 ### code
 [[wiseodd/wgan_tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/wasserstein_gan/wgan_tensorflow.py)(very simple, use mlp)  
@@ -195,9 +195,8 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 
 :sparkles:InfoGAN
 --------
-**Apply GAN by learning conditions(unsupervised)**
+**Apply GAN by learning conditions(unsupervised)**  
 Attempt to make conditional learned automatically. Find and control some useful information in the images.  
-
 - z: the same as in GAN. unconstrainted noise to generate a image.  
 - c: like c in conditional GAN, but learned by Q instead of given what that is, unsupervised.  
 
