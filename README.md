@@ -46,21 +46,21 @@ Note:
 - [ ] infogan + wgan + D and Q not share `to be done`
 
 
-# Adversarial Nets
+# Adversarial Nets  
 
-:sparkles: GAN
+:sparkles: GAN  
 --------
-**The beginning.**
-The first paper. 
+**The beginning.**  
+The first paper.   
 
-Two main research directions:
-1. stabilize the training
-2. apply GAN
-### paper
-[Generative Adversarial Nets] 
+Two main research directions:  
+1. stabilize the training  
+2. apply GAN  
+### paper  
+[Generative Adversarial Nets]   
 
-- **Loss** :
-$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))] $$
+- **Loss** :  
+$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))] $$  
 
 ### blog
 [[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory)   
@@ -69,46 +69,46 @@ $$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  
 
  ***************
  
-:sparkles:DCGAN
+:sparkles:DCGAN  
 --------
 **stabilize the training with some architectural constraints.**  
 GAN is hard to train.   
 Stabilize Generative Adversarial networks with some architectural constraints.  
 Popular used in cv. Most used architecture.  
 
-### paper
-[Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks]
+### paper  
+[Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks]  
 
-**Architecture guidelines for stable Deep Convolutional GANs**
+**Architecture guidelines for stable Deep Convolutional GANs**  
 
-* Replace any pooling layers with strided convolutions (discriminator) and fractional-strided convolutions (generator).
-* Use batchnorm in both the generator and the discriminator
-* Remove fully connected hidden layers for deeper architectures. Just use average pooling at the end.
+* Replace any pooling layers with strided convolutions (discriminator) and fractional-strided convolutions (generator).  
+* Use batchnorm in both the generator and the discriminator  
+* Remove fully connected hidden layers for deeper architectures. Just use average pooling at the end.  
 * Use ReLU activation in generator for all layers except for the output, which uses Tanh.
-* Use LeakyReLU activation in the discriminator for all layers.
+* Use LeakyReLU activation in the discriminator for all layers.  
 
 
 ### blog
 [[bamos/deep-completion]](http://bamos.github.io/2016/08/09/deep-completion/)  (Introduction, Implementation)  
 
 ### code
-[[carpedm20/DCGAN-tensorflow]](https://github.com/carpedm20/DCGAN-tensorflow)( star 1.6k+,  many files, easy to run, hard to read and modify)
-> G: fc-->reshape--> deconv bn relu (4) --> tanh
+[[carpedm20/DCGAN-tensorflow]](https://github.com/carpedm20/DCGAN-tensorflow)( star 1.6k+,  many files, easy to run, hard to read and modify)  
+> G: fc-->reshape--> deconv bn relu (4) --> tanh  
 > D: conv bn lrelu[leak=0.2] (4) --> reshape--> fc(opn=1)-->sigmoid  
-> G Loss: 
+> G Loss:   
 >
 		tf.reduce_mean(sigmoid_cross_entropy_with_logits(self.D_logits_,tf.ones_like(self.D_)))
-> D Loss: 
+> D Loss:   
 >
 		tf.reduce_mean(sigmoid_cross_entropy_with_logits(self.D_logits, tf.ones_like(self.D))) + tf.reduce_mean(sigmoid_cross_entropy_with_logits(self.D_logits_, tf.zeros_like(self.D_)))
-> Solver: Adam lr=0.0002  stepG:stepD=1:1 
-> Data: mnist celebA __normalized to [-1,1] for tanh  and  [0,1] for sigmoid__
+> Solver: Adam lr=0.0002  stepG:stepD=1:1   
+> Data: mnist celebA __normalized to [-1,1] for tanh  and  [0,1] for sigmoid__  
 
-[[sugyan/tf-dcgan]](https://github.com/sugyan/tf-dcgan)( star 20,  easy to read, just 1 dcgan file. dcgan, generator, discriminator all class. not tf.contrib.layers. )
-> G: fc-->reshape--> deconv bn relu (4) --> tanh
-> D: conv bn lrelu[leak=0.2] (4) --> reshape--> fc(opn=2 one-hot?)
-> Losses:  softmax_cross_entropy_with_logits
-> Solver: Adam lr=0.0002  stepG:stepD=1:1 
+[[sugyan/tf-dcgan]](https://github.com/sugyan/tf-dcgan)( star 20,  easy to read, just 1 dcgan file. dcgan, generator, discriminator all class. not tf.contrib.layers. )  
+> G: fc-->reshape--> deconv bn relu (4) --> tanh  
+> D: conv bn lrelu[leak=0.2] (4) --> reshape--> fc(opn=2 one-hot?)  
+> Losses:  softmax_cross_entropy_with_logits  
+> Solver: Adam lr=0.0002  stepG:stepD=1:1   
 
 
  ***************
@@ -134,24 +134,24 @@ $$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y
 
 ### code
 [[wiseodd/conditional_gan]](https://github.com/wiseodd/generative-models/blob/master/GAN/conditional_gan/cgan_tensorflow.py)(star 500+, very simple, 1 file, easy to read and run,  not conv, inconvinient to extend)  
-> G: concat(z,y)-->fc-->sigmoid
-> D: concat(z,y)-->fc-->sigmoid loss
-> Solver: Adam lr=0.001  stepG:stepD=1:1 
-> Data: mnist __[0,1]__
+> G: concat(z,y)-->fc-->sigmoid  
+> D: concat(z,y)-->fc-->sigmoid loss  
+> Solver: Adam lr=0.001  stepG:stepD=1:1   
+> Data: mnist __[0,1]__  
 
 [[zhangqianhui/Conditional-Gans]](https://github.com/zhangqianhui/Conditional-Gans)(star 16, easy to extend)  
-> G: concat(z,y)-->fc-->conv-->sigmoid
-> D: **conv_concat(x,y)**-->conv-->fc-->sigmoid loss
-> Solver: Adam lr=0.0002  stepG:stepD=2:1 
-> Data: mnist __[0,1]__
+> G: concat(z,y)-->fc-->conv-->sigmoid  
+> D: **conv_concat(x,y)**-->conv-->fc-->sigmoid loss  
+> Solver: Adam lr=0.0002  stepG:stepD=2:1   
+> Data: mnist __[0,1]__  
 
 [[fairytale0011/Conditional-WassersteinGAN]](https://github.com/fairytale0011/Conditional-WassersteinGAN/blob/master/WGAN_AC.py) (star 6. use wgan to train GAN, use separate classifier to enforce the condition. very clear, easy to read and modify)  
-> G: concat(z,y)-->fc-->conv-->tanh
-> D: X-->conv-->fc-->sigmoid loss
-> **classifier**: X-->conv-->fc-->softmax loss (real label to train classifier, fake label to train G) 
-> clip D var
-> Solver: RMS  lr=0.0002  stepG:stepD:stepC_real:stepC_fake=1:10:0.5:0.5 
-> Data: mnist __[-1,1]__
+> G: concat(z,y)-->fc-->conv-->tanh  
+> D: X-->conv-->fc-->sigmoid loss  
+> **classifier**: X-->conv-->fc-->softmax loss (real label to train classifier, fake label to train G)   
+> clip D var  
+> Solver: RMS  lr=0.0002  stepG:stepD:stepC_real:stepC_fake=1:10:0.5:0.5   
+> Data: mnist __[-1,1]__  
 
 
  ***************
@@ -180,15 +180,15 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 
 ### code
 [[wiseodd/wgan_tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/wasserstein_gan/wgan_tensorflow.py)(very simple, use mlp)  
-> G: fc-->sigmoid
-> D: fc  clip D
-> G Loss: 
+> G: fc-->sigmoid  
+> D: fc  clip D  
+> G Loss:   
 >
 		G_loss = -tf.reduce_mean(D_fake)
-> D Loss: 
+> D Loss:   
 >
 		D_loss = tf.reduce_mean(D_fake) - tf.reduce_mean(D_real) 
-> Solver: RMSProp lr=0.0001  stepG:stepD=1:5 
+> Solver: RMSProp lr=0.0001  stepG:stepD=1:5   
 
 
 ****************
@@ -218,22 +218,34 @@ $$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$
 ### code
 [[openai/infogan]](https://github.com/openai/InfoGAN)( star 300+,  hard to read and modify, too much files)  
 > G: fc(1024 bn relu)-->fc (bn relu) reshape--> deconv bn relu --> deconv flatten--> activate
+
 > D and Q: 
+
 > shared: reshape-->conv lrelu --> conv bn lrelu --> fc bn lrelu 
+
 > D: fc(1) --> activate
-> Q: fc(128) bn lrelu --> fc (c_dim) --> activate
-activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Bernoulli)
+
+> Q: fc(128) bn lrelu --> fc (c_dim) --> activate  
+
+> activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Bernoulli)
+
 > Losses: 
+
 > D and G: sigmoid as DCGAN 
+
 > Q: cross entropy loss (softmax for discrete) ** add Q loss to D and G loss **
+
 > Solver: 
+
 > Adam beta1=0.5 stepG:stepD=1:1 
 
 *my understanding*: 
+
 > Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q(D) var and G var by Q:D:G=2:1:1
 
 [[wiseodd/infogan-tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/infogan/infogan_tensorflow.py)(also simple, use mlp)  
 > Q: fc --> softmax with c (not share with D)  update vars: G and Q
+
 > Solver: Adam G:D:Q = 1:1:1
 
 
