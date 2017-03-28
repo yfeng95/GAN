@@ -39,9 +39,9 @@ Note:
 
 **infoGAN**
 
-- [x] infogan + mlp + D and Q not share `Q loss to update G(as feedback) not so good `
-- [x] infogan + mlp + D and Q share `not so good. lacking numbers`
-- [x] infogan + conv + D and Q not share `good clear and have 10 number`
+- [x] infogan + mlp + D and Q not share `Q loss to update G(as feedback) not  good `
+- [x] infogan + mlp + D and Q share `not  good. lacking numbers`
+- [x] infogan + conv + D and Q not share `clear and have 10 number`
 - [x] infogan + conv + D and Q share `the same with not share, not faster? `
 - [ ] infogan + wgan + D and Q not share `to be done`
 
@@ -60,9 +60,7 @@ Two main research directions:
 [Generative Adversarial Nets] 
 
 - **Loss** :
-```tex
-\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))]
-```  
+$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))] $$
 
 ### blog
 [[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory)   
