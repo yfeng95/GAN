@@ -53,16 +53,17 @@ GAN
 **The beginning.**
 The first paper. 
 
-Two main research direction:
+Two main research directions:
 1. stabilize the training
 2. apply GAN
-#### paper
+### paper
 [Generative Adversarial Nets] 
 
 - **Loss** :
+
 $$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$  
-$$\min_{G} \max_{D} V(D,G) = E_{x\sim p_{data}(x)}[log(D(x)]  +  E_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$
-#### blog
+
+### blog
 [[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory)   
 [[wiseodd/gan-tensorflow]](http://wiseodd.github.io/techblog/2016/09/17/gan-tensorflow/) (Introduction, Implementation)  
 
@@ -76,7 +77,7 @@ GAN is hard to train.
 Stabilize Generative Adversarial networks with some architectural constraints.  
 Popular used in cv. Most used architecture.  
 
-#### paper
+### paper
 [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks]
 
 **Architecture guidelines for stable Deep Convolutional GANs**
@@ -88,10 +89,10 @@ Popular used in cv. Most used architecture.
 * Use LeakyReLU activation in the discriminator for all layers.
 
 
-#### blog
+### blog
 [[bamos/deep-completion]](http://bamos.github.io/2016/08/09/deep-completion/)  (Introduction, Implementation)  
 
-#### code
+### code
 [[carpedm20/DCGAN-tensorflow]](https://github.com/carpedm20/DCGAN-tensorflow)( star 1.6k+,  many files, easy to run, hard to read and modify)
 > G: fc-->reshape--> deconv bn relu (4) --> tanh
 > D: conv bn lrelu[leak=0.2] (4) --> reshape--> fc(opn=1)-->sigmoid  
@@ -123,16 +124,16 @@ G(z)-->G(z,y)  D(X)-->D(X,y)
 A very important structure that used in image applications (data augmentation, image transfer, etc.)   
 Make GAN useful.   
 
-#### paper
+### paper
 [Conditional Generative Adversarial Nets]
 
 - **Loss** :
 $$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))]$$
 
-#### blog
+### blog
 [[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)  
 
-#### code
+### code
 [[wiseodd/conditional_gan]](https://github.com/wiseodd/generative-models/blob/master/GAN/conditional_gan/cgan_tensorflow.py)(star 500+, very simple, 1 file, easy to read and run,  not conv, inconvinient to extend)  
 > G: concat(z,y)-->fc-->sigmoid
 > D: concat(z,y)-->fc-->sigmoid loss
@@ -162,7 +163,7 @@ Wasserstein GAN
 GAN before using JS divergence has the problem of non-overlapping, leading to mode collapse and convergence difficulty.   
 Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above without particular architecture (like dcgan).   
 
-#### paper
+### paper
 [Wasserstein GAN]
 
 **Algorithm guidelines for stable GANs**
@@ -173,12 +174,12 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 * Use RMSProp instead of ADAM
 * Lower learning rate (0.00005)
 
-#### blog
+### blog
 [[AidenN/WassersteinGAN]](https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7)  (Theory)  
 [[wiseodd/wasserstein-gan]](http://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/)  (Introduction, Implementation)  
 [[zhihu/Wassertein GAN]](https://zhuanlan.zhihu.com/p/25071913)   (Introduction, Analysis)
 
-#### code
+### code
 [[wiseodd/wgan_tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/wasserstein_gan/wgan_tensorflow.py)(very simple, use mlp)  
 > G: fc-->sigmoid
 > D: fc  clip D
@@ -201,20 +202,21 @@ Attempt to make conditional learned automatically. Find and control some useful 
 - z: the same as in GAN. unconstrainted noise to generate a image.  
 - c: like c in conditional GAN, but learned by Q instead of given what that is, unsupervised.  
 
-#### paper
+### paper
 [InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets]
 
 - **Loss** :
+
 $$\min_{G} \max_{D} V_I(D,G) = V(D,G) - \lambda I(c;G(z,c))$$  
 
 Define: $Q(c|x)$ to approximate $P(c|x)$, (which is the conditional distribution)  
 
 $$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$  
 
-#### blog
+### blog
 [[wiseodd/infogan]](http://wiseodd.github.io/techblog/2017/01/29/infogan/)  (Introduction Implementation)  
 
-#### code
+### code
 [[openai/infogan]](https://github.com/openai/InfoGAN)( star 300+,  hard to read and modify, too much files)  
 > G: fc(1024 bn relu)-->fc (bn relu) reshape--> deconv bn relu --> deconv flatten--> activate
 > D and Q: 
