@@ -1,3 +1,51 @@
+
+All have been tested with python2.7+ and tensorflow1.0+ in linux.
+
+* Datas: save training data.
+* Samples: save generated data, each folder contains several figs to **show the results**.
+* utils: contains 2 files
+	- data.py: prepreocessing data.
+	- nets.py: Generator and Discriminator are saved here.
+	
+Note:
+> The final layer can be sigmoid(data: [0,1]) or tanh(data:[-1,1]), my codes all use sigmoid.  
+> Using weights_initializer=tf.random_normal_initializer(0, 0.02) will converge faster.  
+
+**DCGAN**
+
+- [x] conv 
+
+*I used very simple G and D(2-3 layers) to test mnist.*
+
+**Conditional GAN**
+
+- [x] condition + mlp `D:G = 1:1`
+- [x] condition + conv(dcgan)  `D:G=1:1 faster than mlp`
+- [x] dcgan + classifier `D:G:C = 1:1:1 very fast`
+- [x] wgan + classifier `D:G:C = 5:1:1  fast`
+
+
+Note:
+> a. The step ratio of G and D is important and it takes some time to reach the balance. Condition+mlp with D:G = 1:1 works better than 2:1.   
+> b. Adding a classfier to trained with conditions and constraint G works faster and better than appending conditions to images for D training.  
+>  **!** There's a very strange phenomenon that when the 16 test numbers are the same in one batch, the result figs of cgan with conv layer are wrong, while when the test numbers are different, the result figs are correct. The codes in [[zhangqianhui/Conditional-Gans]](https://github.com/zhangqianhui/Conditional-Gans) has the same problem, I still haven't found where went wrong.  
+
+
+**Wasserstein GAN**
+
+- [x] wgan + mlp `D:G = 5: 1 not good, need to *modify*`
+- [x] wgan + conv(dcgan) `D:G = 5:1 clip = 0.01`
+
+
+**infoGAN**
+
+- [x] infogan + mlp + D and Q not share `Q loss to update G(as feedback) not so good `
+- [x] infogan + mlp + D and Q share `not so good. lacking numbers`
+- [x] infogan + conv + D and Q not share `good clear and have 10 number`
+- [x] infogan + conv + D and Q share `the same with not share, not faster? `
+- [ ] infogan + wgan + D and Q not share `to be done`
+
+
 # Adversarial Nets
 
 GAN
@@ -12,11 +60,11 @@ Two main research direction:
 [Generative Adversarial Nets] 
 
 - **Loss** :
-$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$
-
+$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$  
+$$\min_{G} \max_{D} V(D,G) = E_{x\sim p_{data}(x)}[log(D(x)]  +  E_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$
 #### blog
-[[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory) 
-[[wiseodd/gan-tensorflow]](http://wiseodd.github.io/techblog/2016/09/17/gan-tensorflow/) (Introduction, Implementation)
+[[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory)   
+[[wiseodd/gan-tensorflow]](http://wiseodd.github.io/techblog/2016/09/17/gan-tensorflow/) (Introduction, Implementation)  
 
 
  ***************
@@ -41,7 +89,7 @@ Popular used in cv. Most used architecture.
 
 
 #### blog
-[[bamos/deep-completion]](http://bamos.github.io/2016/08/09/deep-completion/)  (Introduction, Implementation)
+[[bamos/deep-completion]](http://bamos.github.io/2016/08/09/deep-completion/)  (Introduction, Implementation)  
 
 #### code
 [[carpedm20/DCGAN-tensorflow]](https://github.com/carpedm20/DCGAN-tensorflow)( star 1.6k+,  many files, easy to run, hard to read and modify)
@@ -82,22 +130,22 @@ Make GAN useful.
 $$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))]$$
 
 #### blog
-[[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)
+[[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)  
 
 #### code
-[[wiseodd/conditional_gan]](https://github.com/wiseodd/generative-models/blob/master/GAN/conditional_gan/cgan_tensorflow.py)(star 500+, very simple, 1 file, easy to read and run,  not conv, inconvinient to extend)
+[[wiseodd/conditional_gan]](https://github.com/wiseodd/generative-models/blob/master/GAN/conditional_gan/cgan_tensorflow.py)(star 500+, very simple, 1 file, easy to read and run,  not conv, inconvinient to extend)  
 > G: concat(z,y)-->fc-->sigmoid
 > D: concat(z,y)-->fc-->sigmoid loss
 > Solver: Adam lr=0.001  stepG:stepD=1:1 
 > Data: mnist __[0,1]__
 
-[[zhangqianhui/Conditional-Gans]](https://github.com/zhangqianhui/Conditional-Gans)(star 16, easy to extend)
+[[zhangqianhui/Conditional-Gans]](https://github.com/zhangqianhui/Conditional-Gans)(star 16, easy to extend)  
 > G: concat(z,y)-->fc-->conv-->sigmoid
 > D: **conv_concat(x,y)**-->conv-->fc-->sigmoid loss
 > Solver: Adam lr=0.0002  stepG:stepD=2:1 
 > Data: mnist __[0,1]__
 
-[[fairytale0011/Conditional-WassersteinGAN]](https://github.com/fairytale0011/Conditional-WassersteinGAN/blob/master/WGAN_AC.py) (star 6. use wgan to train GAN, use separate classifier to enforce the condition. very clear, easy to read and modify)
+[[fairytale0011/Conditional-WassersteinGAN]](https://github.com/fairytale0011/Conditional-WassersteinGAN/blob/master/WGAN_AC.py) (star 6. use wgan to train GAN, use separate classifier to enforce the condition. very clear, easy to read and modify)  
 > G: concat(z,y)-->fc-->conv-->tanh
 > D: X-->conv-->fc-->sigmoid loss
 > **classifier**: X-->conv-->fc-->softmax loss (real label to train classifier, fake label to train G) 
@@ -126,12 +174,12 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 * Lower learning rate (0.00005)
 
 #### blog
-[[AidenN/WassersteinGAN]](https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7)  (Theory)
-[[wiseodd/wasserstein-gan]](http://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/)  (Introduction, Implementation)
-[[zhihu/Wassertein GAN]](https://zhuanlan.zhihu.com/p/25071913) (Introduction, Analysis)
+[[AidenN/WassersteinGAN]](https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7)  (Theory)  
+[[wiseodd/wasserstein-gan]](http://wiseodd.github.io/techblog/2017/02/04/wasserstein-gan/)  (Introduction, Implementation)  
+[[zhihu/Wassertein GAN]](https://zhuanlan.zhihu.com/p/25071913)   (Introduction, Analysis)
 
 #### code
-[[wiseodd/wgan_tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/wasserstein_gan/wgan_tensorflow.py)(very simple, use mlp)
+[[wiseodd/wgan_tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/wasserstein_gan/wgan_tensorflow.py)(very simple, use mlp)  
 > G: fc-->sigmoid
 > D: fc  clip D
 > G Loss: 
@@ -139,10 +187,8 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 		G_loss = -tf.reduce_mean(D_fake)
 > D Loss: 
 >
-		D_loss = tf.reduce_mean(D_real) - tf.reduce_mean(D_fake)
+		D_loss = tf.reduce_mean(D_fake) - tf.reduce_mean(D_real) 
 > Solver: RMSProp lr=0.0001  stepG:stepD=1:5 
-
-
 
 
 ****************
@@ -159,17 +205,17 @@ Attempt to make conditional learned automatically. Find and control some useful 
 [InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets]
 
 - **Loss** :
-$$\min_{G} \max_{D} V_I(D,G) = V(D,G) - \lambda I(c;G(z,c))$$
+$$\min_{G} \max_{D} V_I(D,G) = V(D,G) - \lambda I(c;G(z,c))$$  
 
-Define: $Q(c|x)$ to approximate $P(c|x)$, (which is the conditional distribution)
+Define: $Q(c|x)$ to approximate $P(c|x)$, (which is the conditional distribution)  
 
-$$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$
+$$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$  
 
 #### blog
-[[wiseodd/infogan]](http://wiseodd.github.io/techblog/2017/01/29/infogan/)  (I, Implementation)
+[[wiseodd/infogan]](http://wiseodd.github.io/techblog/2017/01/29/infogan/)  (Introduction Implementation)  
 
 #### code
-[[openai/infogan]](https://github.com/openai/InfoGAN)( star 300+,  hard to read and modify, too much files)
+[[openai/infogan]](https://github.com/openai/InfoGAN)( star 300+,  hard to read and modify, too much files)  
 > G: fc(1024 bn relu)-->fc (bn relu) reshape--> deconv bn relu --> deconv flatten--> activate
 > D and Q: 
 > shared: reshape-->conv lrelu --> conv bn lrelu --> fc bn lrelu 
@@ -183,11 +229,13 @@ activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Ber
 > Adam beta1=0.5 stepG:stepD=1:1 
 
 *my understanding*: 
-> Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q var and G var by Q:D:G=2:1:1
+> Adding Q loss to D and G loss, then updating D var and G var by 1:1 **equal to** Q loss to update Q(D) var and G var by Q:D:G=2:1:1
 
-[[wiseodd/infogan-tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/infogan/infogan_tensorflow.py)(also simple, use mlp)
+[[wiseodd/infogan-tensorflow]](https://github.com/wiseodd/generative-models/blob/master/GAN/infogan/infogan_tensorflow.py)(also simple, use mlp)  
 > Q: fc --> softmax with c (not share with D)  update vars: G and Q
 > Solver: Adam G:D:Q = 1:1:1
+
+
 
 
 
@@ -195,39 +243,3 @@ activate: softmax(Categorical)  / mean stddev:sqrt(e^x) (Gaussian) / sigmoid(Ber
 Tensorflow style: https://www.tensorflow.org/community/style_guide  
 tf.concat(1,[x,y]) in tf 0.12- --->  tf.concat([x,y],1) in tf 1.0+.  
 use tf.get_Variable or tf.contrib.layers to reuse variables.  
-weights_initializer=tf.random_normal_initializer(0, 0.02) will converge faster.  
-
-# My Implementation
-Enveriment:
-> python 2.7. tensorflow 1.0.
-
-
-**DCGAN**
-
-- [x] conv
-
-Note:
-> The final layer can be sigmoid(data: [0,1]) or tanh(data:[-1,1])
-
-**Conditional GAN**
-
-- [x] condition + mlp `D:G = 1:1`
-- [x] condition + conv(dcgan)  `D:G=1:1 faster than mlp`
-- [ ] dcgan + classifier `don't work. to be modified`
-- [ ] wgan + classifier `to be done`
-
-Note:
-> The step ratio of G and D is very important and it takes some time to reach the balance. Condition+mlp with D:G = 2:1 works badly.
-
-
-**Wasserstein GAN**
-
-- [ ] wgan + dcgan
-
-
-**infoGAN**
-
-- [x] conditional + mlp D and Q not share 
-- [ ] conditional + mlp
-- [ ] conditional + conv 
-
