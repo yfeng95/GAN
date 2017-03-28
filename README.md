@@ -48,11 +48,10 @@ Note:
 
 # Adversarial Nets
 
-==GAN==
+:star: GAN
 --------
 **The beginning.**
-The first paper. 
- $\alpha$
+:star:The first paper. 
 
 Two main research directions:
 1. stabilize the training
@@ -61,9 +60,9 @@ Two main research directions:
 [Generative Adversarial Nets] 
 
 - **Loss** :
-
-$$ \min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))] $$  
-
+```tex
+$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))]$$  
+```
 ### blog
 [[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory)   
 [[wiseodd/gan-tensorflow]](http://wiseodd.github.io/techblog/2016/09/17/gan-tensorflow/) (Introduction, Implementation)  
@@ -71,7 +70,7 @@ $$ \min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)] 
 
  ***************
  
-==DCGAN==
+DCGAN
 --------
 **stabilize the training with some architectural constraints.**  
 GAN is hard to train.   
@@ -115,7 +114,7 @@ Popular used in cv. Most used architecture.
 
  ***************
  
-==Conditional GAN==
+Conditional GAN
 --------
 **Apply GAN by adding condition(supervised)**
 Add conditions to GAN by feeding y to G.   
@@ -158,7 +157,7 @@ $$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y
 
  ***************
 
-==Wasserstein GAN==
+Wasserstein GAN
 --------
 **stabilize the training by using Wasserstein-1 distance**
 GAN before using JS divergence has the problem of non-overlapping, leading to mode collapse and convergence difficulty.   
@@ -195,7 +194,7 @@ Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above w
 
 ****************
 
-==InfoGAN==
+InfoGAN
 --------
 **Apply GAN by learning conditions(unsupervised)**
 Attempt to make conditional learned automatically. Find and control some useful information in the images.  
