@@ -126,8 +126,8 @@ Make GAN useful.
 ### paper
 [Conditional Generative Adversarial Nets]
 
-- **Loss** :
-![CGAN loss](http://www.sciweavers.org/upload/Tex2Img_1490854553/render.png) 
+- **Loss** :  
+![CGAN loss](http://www.sciweavers.org/upload/Tex2Img_1490854553/render.png)   
 
 ### blog
 [[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)  
@@ -205,11 +205,11 @@ Attempt to make conditional learned automatically. Find and control some useful 
 
 - **Loss** :
 
-![infoGAN loss 1](http://www.sciweavers.org/upload/Tex2Img_1490854621/render.png) 
+![infoGAN loss 1](http://www.sciweavers.org/upload/Tex2Img_1490854621/render.png)   
 
 Define: Q(c|x) to approximate P(c|x)(which is the conditional distribution)  
 
-![infoGAN loss 2](http://www.sciweavers.org/upload/Tex2Img_1490854714/render.png) 
+![infoGAN loss 2](http://www.sciweavers.org/upload/Tex2Img_1490854714/render.png)   
 
 ### blog
 [[wiseodd/infogan]](http://wiseodd.github.io/techblog/2017/01/29/infogan/)  (Introduction Implementation)  
