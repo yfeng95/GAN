@@ -60,7 +60,7 @@ Two main research directions:
 [Generative Adversarial Nets]   
 
 - **Loss** :  
-$$\min_{G} \max_{D} V(D,G) = \mathop{\mathbb{E}}_{x\sim p_{data}(x)}[log(D(x)]  +  \mathop{\mathbb{E}}_{z\sim p_{z}(z)}[log(1 - D(G(x)))] $$  
+![GAN loss](http://www.sciweavers.org/upload/Tex2Img_1490854443/render.png)  
 
 ### blog
 [[openai/generative-models]](https://blog.openai.com/generative-models/#contributions) (Motivation, Game Theory)   
@@ -127,7 +127,7 @@ Make GAN useful.
 [Conditional Generative Adversarial Nets]
 
 - **Loss** :
-$$\min_G \max_D V(D, G) = \mathop{\mathbb{E}}_{x \sim p_{data}(x)} [\log D(x | y)] + \mathop{\mathbb{E}}_{z \sim p_z(z)} [\log(1 - D(G(z | y))]$$  
+![CGAN loss](http://www.sciweavers.org/upload/Tex2Img_1490854553/render.png) 
 
 ### blog
 [[wiseodd/conditional-gan-tensorflow]](http://wiseodd.github.io/techblog/2016/12/24/conditional-gan-tensorflow/)  (Fomulation, Architecture, Implementation)  
@@ -205,11 +205,11 @@ Attempt to make conditional learned automatically. Find and control some useful 
 
 - **Loss** :
 
-$$\min_{G} \max_{D} V_I(D,G) = V(D,G) - \lambda I(c;G(z,c))$$  
+![infoGAN loss 1](http://www.sciweavers.org/upload/Tex2Img_1490854621/render.png) 
 
-Define: $Q(c|x)$ to approximate $P(c|x)$, (which is the conditional distribution)  
+Define: Q(c|x) to approximate P(c|x)(which is the conditional distribution)  
 
-$$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$  
+![infoGAN loss 2](http://www.sciweavers.org/upload/Tex2Img_1490854714/render.png) 
 
 ### blog
 [[wiseodd/infogan]](http://wiseodd.github.io/techblog/2017/01/29/infogan/)  (Introduction Implementation)  
@@ -242,3 +242,6 @@ $$\min_{G,Q} \max_{D} V_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)$$
 Tensorflow style: https://www.tensorflow.org/community/style_guide  
 tf.concat(1,[x,y]) in tf 0.12- --->  tf.concat([x,y],1) in tf 1.0+.  
 use tf.get_Variable or tf.contrib.layers to reuse variables.  
+
+A good website to convert latex equation to img(then insert into README):
+http://www.sciweavers.org/free-online-latex-equation-editor 
