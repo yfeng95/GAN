@@ -112,8 +112,8 @@ class Q_mlp_mnist():
 class G_conv(object):
 	def __init__(self):
 		self.name = 'G_conv'
-		self.size = 7
-		self.channel = 1
+		self.size = 64/16
+		self.channel = 3
 
 	def __call__(self, z):
 		with tf.variable_scope(self.name) as scope:
@@ -127,66 +127,97 @@ class G_conv(object):
 									activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm, padding='SAME', weights_initializer=tf.random_normal_initializer(0, 0.02))
 			
 			g = tcl.conv2d_transpose(g, self.channel, 3, stride=2, # size*16
-										activation_fn=tf.nn.tanh, padding='SAME', weights_initializer=tf.random_normal_initializer(0, 0.02))
+										activation_fn=tf.nn.sigmoid, padding='SAME', weights_initializer=tf.random_normal_initializer(0, 0.02))
 			return g
 	@property
 	def vars(self):
-		return [var for var in tf.global_variables() if self.name in var.name]
+		return tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=self.name)
 
 class D_conv(object):
 	def __init__(self):
-		self.name = 'G_conv'
+		self.name = 'D_conv'
 
-	def __call__(self, x, reuse=True):
+	def __call__(self, x, reuse=False):
 		with tf.variable_scope(self.name) as scope:
 			if reuse:
 				scope.reuse_variables()
 			size = 64
-			d = tcl.conv2d(x, num_outputs=size, kernel_size=3, # bzx64x64x3 -> bzx32x32x64
+			shared = tcl.conv2d(x, num_outputs=size, kernel_size=4, # bzx64x64x3 -> bzx32x32x64
 						stride=2, activation_fn=lrelu)
-			d = tcl.conv2d(d, num_outputs=size * 2, kernel_size=3, # 16x16x128
+			shared = tcl.conv2d(shared, num_outputs=size * 2, kernel_size=4, # 16x16x128
 						stride=2, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			d = tcl.conv2d(d, num_outputs=size * 4, kernel_size=3, # 8x8x256
+			shared = tcl.conv2d(shared, num_outputs=size * 4, kernel_size=4, # 8x8x256
 						stride=2, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			d = tcl.conv2d(d, num_outputs=size * 8, kernel_size=3, # 4x4x512
+			shared = tcl.conv2d(shared, num_outputs=size * 8, kernel_size=4, # 4x4x512
 						stride=2, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			d = tcl.fully_connected(tcl.flatten( # reshape, 1
-						d), 1, activation_fn=None)
-			return d
+
+			shared = tcl.flatten(shared)
+	
+			d = tcl.fully_connected(shared, 1, activation_fn=None, weights_initializer=tf.random_normal_initializer(0, 0.02))
+			q = tcl.fully_connected(shared, 128, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
+			q = tcl.fully_connected(q, 2, activation_fn=None) # 10 classes
+			return d, q
+			
 	@property
 	def vars(self):
-		return [var for var in tf.global_variables() if self.name in var.name]
+		return tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=self.name)
 
-
-class D_Q(object):
+class C_conv(object):
 	def __init__(self):
-		self.name = 'd_g'
+		self.name = 'C_conv'
 
-	def __call__(self, x, reuse=True):
+	def __call__(self, x, reuse=False):
 		with tf.variable_scope(self.name) as scope:
 			if reuse:
 				scope.reuse_variables()
 			size = 64
-			shared = tcl.conv2d(x, num_outputs=size, kernel_size=3, # bzx64x64x3 -> bzx32x32x64
+			shared = tcl.conv2d(x, num_outputs=size, kernel_size=4, # bzx64x64x3 -> bzx32x32x64
 						stride=2, activation_fn=lrelu)
-			shared = tcl.conv2d(shared, num_outputs=size * 2, kernel_size=3, # 16x16x128
+			shared = tcl.conv2d(shared, num_outputs=size * 2, kernel_size=4, # 16x16x128
 						stride=2, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			shared = tcl.conv2d(shared, num_outputs=size * 4, kernel_size=3, # 8x8x256
+			shared = tcl.conv2d(shared, num_outputs=size * 4, kernel_size=4, # 8x8x256
 						stride=2, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
 			#d = tcl.conv2d(d, num_outputs=size * 8, kernel_size=3, # 4x4x512
 			#			stride=2, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
+
 			shared = tcl.fully_connected(tcl.flatten( # reshape, 1
 						shared), 1024, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
 			
-			d = tcl.fully_connected(tcl.flatten(shared), 1, activation_fn=None)
-
 			q = tcl.fully_connected(tcl.flatten(shared), 128, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
 			q = tcl.fully_connected(q, 10, activation_fn=None) # 10 classes
 		
-			return d,q
+			return q
 	@property
 	def vars(self):
 		return [var for var in tf.global_variables() if self.name in var.name]
+
+class V_conv(object):
+	def __init__(self):
+		self.name = 'V_conv'
+
+	def __call__(self, x, reuse=False):
+		with tf.variable_scope(self.name) as scope:
+			if reuse:
+				scope.reuse_variables()
+			size = 64
+			shared = tcl.conv2d(x, num_outputs=size, kernel_size=4, # bzx64x64x3 -> bzx32x32x64
+						stride=2, activation_fn=tf.nn.relu)
+			shared = tcl.conv2d(shared, num_outputs=size * 2, kernel_size=4, # 16x16x128
+						stride=2, activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm)
+			shared = tcl.conv2d(shared, num_outputs=size * 4, kernel_size=4, # 8x8x256
+						stride=2, activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm)
+			shared = tcl.conv2d(shared, num_outputs=size * 8, kernel_size=3, # 4x4x512
+						stride=2, activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm)
+
+			shared = tcl.fully_connected(tcl.flatten( # reshape, 1
+						shared), 1024, activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm)
+			
+			v = tcl.fully_connected(tcl.flatten(shared), 128)
+			return v
+	@property
+	def vars(self):
+		return [var for var in tf.global_variables() if self.name in var.name]
+
 
 # -------------------------------- MNIST for test
 class G_conv_mnist(object):
@@ -226,7 +257,7 @@ class D_conv_mnist(object):
 			
 			d = tcl.fully_connected(shared, 1, activation_fn=None, weights_initializer=tf.random_normal_initializer(0, 0.02))
 			q = tcl.fully_connected(shared, 128, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			q = tcl.fully_connected(q, 10, activation_fn=None) # 10 classes
+			q = tcl.fully_connected(q, 2, activation_fn=None) # 10 classes
 			return d, q
 	@property
 	def vars(self):
