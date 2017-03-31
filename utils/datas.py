@@ -11,10 +11,9 @@ import matplotlib.gridspec as gridspec
 from tensorflow.examples.tutorials.mnist import input_data
 
 prefix = './Datas/'
-def get_img(img_path,resize_h):
+def get_img(img_path, crop_h, resize_h):
 	img=scipy.misc.imread(img_path).astype(np.float)
 	# crop resize
-	crop_h = 108
 	crop_w = crop_h
 	#resize_h = 64
 	resize_w = resize_h
@@ -23,8 +22,49 @@ def get_img(img_path,resize_h):
 	i = int(round((w - crop_w)/2.))
 	cropped_image = scipy.misc.imresize(img[j:j+crop_h, i:i+crop_w],[resize_h, resize_w])
 
-	return np.array(cropped_image)/127.5 - 1
+	return np.array(cropped_image)/255.0
 
+class face3D():
+	def __init__(self):
+		datapath = '/ssd/fengyao/pose/pose/images'
+		self.z_dim = 100
+		self.c_dim = 2
+		self.size = 64
+		self.channel = 3
+		self.data = glob(os.path.join(datapath, '*.jpg'))
+
+		self.batch_count = 0
+
+	def __call__(self,batch_size):
+		batch_number = len(self.data)/batch_size
+		if self.batch_count < batch_number-1:
+			self.batch_count += 1
+		else:
+			self.batch_count = 0
+
+		path_list = self.data[self.batch_count*batch_size:(self.batch_count+1)*batch_size]
+
+		batch = [get_img(img_path, 256, self.size) for img_path in path_list]
+		batch_imgs = np.array(batch).astype(np.float32)
+		#fig = self.data2fig(batch_imgs[:16,:,:])
+		#plt.savefig('out_face/{}.png'.format(str(self.batch_count).zfill(3)), bbox_inches='tight')
+		#plt.close(fig)
+		
+		return batch_imgs
+
+	def data2fig(self, samples):
+		fig = plt.figure(figsize=(4, 4))
+		gs = gridspec.GridSpec(4, 4)
+		gs.update(wspace=0.05, hspace=0.05)
+
+		for i, sample in enumerate(samples):
+			ax = plt.subplot(gs[i])
+			plt.axis('off')
+			ax.set_xticklabels([])
+			ax.set_yticklabels([])
+			ax.set_aspect('equal')
+			plt.imshow(sample)
+		return fig
 
 class celebA():
 	def __init__(self):
@@ -45,18 +85,17 @@ class celebA():
 
 		path_list = self.data[self.batch_count*batch_size:(self.batch_count+1)*batch_size]
 
-		batch = [get_img(img_path,self.size) for img_path in path_list]
+		batch = [get_img(img_path, 128, self.size) for img_path in path_list]
 		batch_imgs = np.array(batch).astype(np.float32)
-
-		#fig = self.data2fig((batch_imgs[:16,:,:]+1)/2)
-		#plt.savefig('out_celebA/{}.png'.format(str(self.batch_count).zfill(3)), bbox_inches='tight')
-		#plt.close(fig)
-		
+		'''
+		print self.batch_count
+		fig = self.data2fig(batch_imgs[:16,:,:])
+		plt.savefig('out_face/{}.png'.format(str(self.batch_count).zfill(3)), bbox_inches='tight')
+		plt.close(fig)
+		'''
 		return batch_imgs
 
 	def data2fig(self, samples):
-		samples = (samples + 1)/2
-
 		fig = plt.figure(figsize=(4, 4))
 		gs = gridspec.GridSpec(4, 4)
 		gs.update(wspace=0.05, hspace=0.05)
@@ -67,7 +106,7 @@ class celebA():
 			ax.set_xticklabels([])
 			ax.set_yticklabels([])
 			ax.set_aspect('equal')
-			plt.imshow(sample, cmap='Greys_r')
+			plt.imshow(sample)
 		return fig
 
 class mnist():
@@ -107,5 +146,5 @@ class mnist():
 		return fig	
 
 if __name__ == '__main__':
-	data = mnist()
-	print data(3).shape, data(3)
+	data = face3D()
+	print data(17).shape
