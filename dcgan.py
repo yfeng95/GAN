@@ -52,7 +52,7 @@ class DCGAN():
 		
 		for epoch in range(training_epoches):
 			# update D
-			X_b, _ = self.data(batch_size)
+			X_b = self.data(batch_size)
 			self.sess.run(
 				self.D_solver,
 				feed_dict={self.X: X_b, self.z: sample_z(batch_size, self.z_dim)}
@@ -93,15 +93,15 @@ if __name__ == '__main__':
 	os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 
 	# save generated images
-	sample_dir = 'Samples/mnist_dcgan'
+	sample_dir = 'Samples/celebA_dcgan'
 	if not os.path.exists(sample_dir):
 		os.makedirs(sample_dir)
 
 	# param
-	generator = G_conv_mnist()
-	discriminator = D_conv_mnist()
+	generator = G_conv()
+	discriminator = D_conv()
 
-	data = mnist()
+	data = celebA()
 
 	# run
 	dcgan = DCGAN(generator, discriminator, data)
