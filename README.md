@@ -1,23 +1,29 @@
+I organized this reposity mainly for learning GANs, so all codes about classical GANs were implemented with simple network structure and tested by MNIST dataset.   
+Just know about how mathmatical analysis (in network structure and loss function) works in actual codes, learn how others implement the GANs, and finally, enjoy the magic of GANs :-D   
 
-All have been tested with python2.7+ and tensorflow1.0+ in linux.
+For more theoretical details and pratical codes about GANs, please go to [GAN_Theories](https://github.com/YadiraF/GAN_Theories) and [GAN_Applications](https://github.com/YadiraF/GAN_Applications), thanks!     
 
-* Datas: save training data.
-* Samples: save generated data, each folder contains several figs to **show the results**.
-* utils: contains 2 files
-	- data.py: prepreocessing data.
-	- nets.py: Generator and Discriminator are saved here.
+
+***************
+
+All have been tested with python2.7+ and tensorflow1.0+ in linux.  
+
+* Datas: save training data.  
+* Samples: save generated data, each folder contains several figs to **show the results**.  
+* utils: contains 2 files  
+	- data.py: prepreocessing data.  
+	- nets.py: Generator and Discriminator are saved here.  
 	
-Note:
+Note:  
 > The final layer can be sigmoid(data: [0,1]) or tanh(data:[-1,1]), my codes all use sigmoid.  
 > Using weights_initializer=tf.random_normal_initializer(0, 0.02) will converge faster.  
 
-**DCGAN**
+**DCGAN**  
 
-- [x] conv 
+- [x] conv   
 
-*I used very simple G and D(2-3 layers) to test mnist.*
 
-**Conditional GAN**
+**Conditional GAN**  
 
 - [x] condition + mlp `D:G = 1:1`
 - [x] condition + conv(dcgan)  `D:G=1:1 faster than mlp`
@@ -28,7 +34,6 @@ Note:
 Note:
 > a. The step ratio of G and D is important and it takes some time to reach the balance. Condition+mlp with D:G = 1:1 works better than 2:1.   
 > b. Adding a classfier to trained with conditions and constraint G works faster and better than appending conditions to images for D training.  
->  **!** There's a very strange phenomenon that when the 16 test numbers are the same in one batch, the result figs of cgan with conv layer are wrong, while when the test numbers are different, the result figs are correct. The codes in [[zhangqianhui/Conditional-Gans]](https://github.com/zhangqianhui/Conditional-Gans) has the same problem, I still haven't found where went wrong.  
 
 
 **Wasserstein GAN**
