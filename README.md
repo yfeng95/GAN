@@ -48,8 +48,9 @@ Note:
 - [x] infogan + mlp + D and Q share `not  good. lacking numbers`
 - [x] infogan + conv + D and Q not share `clear and have 10 number`
 - [x] infogan + conv + D and Q share `the same with not share, not faster? `
-- [ ] infogan + wgan + D and Q not share `to be done`
+- [ ] infogan + wgan + D and Q not share `to be done`  
 
+Results are shown in the end of this page.   
 
 # Adversarial Nets  
 
