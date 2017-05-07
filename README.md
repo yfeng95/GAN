@@ -63,7 +63,7 @@ Two main research directions:
 1. stabilize the training  
 2. apply GAN  
 ### paper  
-[Generative Adversarial Nets]   
+[[Generative Adversarial Nets]](https://arxiv.org/pdf/1406.2661.pdf)   
 
 - **Loss** :  
 ![GAN loss](README/images/gan.png)  
@@ -83,7 +83,7 @@ Stabilize Generative Adversarial networks with some architectural constraints.
 Popular used in cv. Most used architecture.  
 
 ### paper  
-[Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks]  
+[[Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks]](https://arxiv.org/pdf/1511.06434.pdf)  
 
 **Architecture guidelines for stable Deep Convolutional GANs**  
 
@@ -130,7 +130,7 @@ A very important structure that used in image applications (data augmentation, i
 Make GAN useful.   
 
 ### paper
-[Conditional Generative Adversarial Nets]
+[[Conditional Generative Adversarial Nets]](https://arxiv.org/pdf/1411.1784.pdf)  
 
 - **Loss** :  
 ![CGAN loss](README/images/cgan.png)   
@@ -169,7 +169,7 @@ GAN before using JS divergence has the problem of non-overlapping, leading to mo
 Use EM distance or Wasserstein-1 distance, so GAN solve the two problems above without particular architecture (like dcgan).   
 
 ### paper
-[Wasserstein GAN]
+[[Wasserstein GAN]](https://arxiv.org/pdf/1701.07875.pdf)
 
 **Algorithm guidelines for stable GANs**  
 
@@ -207,7 +207,7 @@ Attempt to make conditional learned automatically. Find and control some useful 
 - c: like c in conditional GAN, but learned by Q instead of given what that is, unsupervised.  
 
 ### paper
-[InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets]
+[[InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets]](https://arxiv.org/pdf/1606.03657.pdf)
 
 - **Loss** :
 
