@@ -240,6 +240,51 @@ Define: Q(c|x) to approximate P(c|x)(which is the conditional distribution)
 > Q: fc --> softmax with c (not share with D)  update vars: G and Q  
 > Solver: Adam G:D:Q = 1:1:1  
 
+# Results
+All images shown here are from `./Samples`, for more information about results, please go to the folder.   
+Then first number of image name is the trianing epoches.   
+For better observing, I keep generated images in the beginning, middle and final training process for each algorithm.  
+
+**Conditional GAN**  
+
+
+- [x] condition + mlp `each pic has the same condition`  
+
+![cgan](README/results/cgan_mlp.png)   
+ 
+ 
+- [x] condition + conv(dcgan)   `each row has the same condition: [0 0 0 0; 1 1 1 1; 2 2 2 2; 3 3 3 3]`    
+
+![cgan](https://raw.githubusercontent.com/YadiraF/GAN/master/Samples/mnist_cgan_conv/039_9.png)   
+
+- [x] dcgan + classifier `condition: [0 1 2 3; 4 5 6 7; 0 1 2 3; 4 5 6 7]  `
+
+![cgan](https://raw.githubusercontent.com/YadiraF/GAN/master/Samples/mnist_cgan_classifier/348_8.png)   
+
+- [x] wgan + classifier  `condition: [0 1 2 3; 4 5 6 7; 0 1 2 3; 4 5 6 7]  `
+
+![cgan](https://raw.githubusercontent.com/YadiraF/GAN/master/Samples/mnist_cgan_wgan_classifier/030_0.png)   
+
+
+
+**InfoGAN**  
+The generated images with the same condition belong to the same category.  
+
+- [x] infogan + conv + D and Q not share `condition: [0 1 2 3; 4 5 6 7; 8 9 0 1; 2 3 4 5] `  
+
+![cgan](https://raw.githubusercontent.com/YadiraF/GAN/master/Samples/mnist_infogan_conv_without_share/058_8.png)   
+
+- [x] infogan + conv + D and Q share `condition: [0 1 2 3; 4 5 6 7; 8 9 0 1; 2 3 4 5] `  
+
+![cgan](https://raw.githubusercontent.com/YadiraF/GAN/master/Samples/mnist_infogan_conv/095_5.png)   
+
+
+
+**DCGAN**
+
+* 3D face result (dcgan)  
+![3d face](README/results/face3D_dcgan.png)   
+
 
 
 
@@ -253,6 +298,4 @@ http://www.sciweavers.org/free-online-latex-equation-editor
 
 
 
-# Appendix
-* 3D face result (dcgan)
-![3d face](README/results/face3D_dcgan.png) 
+
