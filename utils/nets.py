@@ -25,10 +25,10 @@ class G_mlp(object):
 	def __call__(self, z):
 		with tf.variable_scope(self.name) as scope:
 			g = tcl.fully_connected(z, 4 * 4 * 512, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			g = tcl.fully_connected(z, 64, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			g = tcl.fully_connected(z, 64, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			g = tcl.fully_connected(z, 28*28*1, activation_fn=tf.nn.tanh, normalizer_fn=tcl.batch_norm)
-			g = tf.reshape(g, tf.stack([tf.shape(z)[0], 28, 28, 1]))
+			g = tcl.fully_connected(g, 64, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
+			g = tcl.fully_connected(g, 64, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
+			g = tcl.fully_connected(g, 64*64*3, activation_fn=tf.nn.tanh, normalizer_fn=tcl.batch_norm)
+			g = tf.reshape(g, tf.stack([tf.shape(z)[0], 64, 64, 3]))
 			return g
 	@property
 	def vars(self):
@@ -42,13 +42,10 @@ class D_mlp(object):
 		with tf.variable_scope(self.name) as vs:
 			if reuse:
 				vs.reuse_variables()
-			size = 64
-			x = tcl.fully_connected(tf.flatten(x), 64, activation_fn=tf.nn.relu)
-			x = tcl.fully_connected(x, 64,
-						activation_fn=tf.nn.relu)
-			x = tcl.fully_connected(x, 64,
-						activation_fn=tf.nn.relu)
-			logit = tcl.fully_connected(x, 1, activation_fn=None)
+			d = tcl.fully_connected(tf.flatten(x), 64, activation_fn=tf.nn.relu,normalizer_fn=tcl.batch_norm)
+			d = tcl.fully_connected(d, 64,activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm)
+			d = tcl.fully_connected(d, 64,activation_fn=tf.nn.relu, normalizer_fn=tcl.batch_norm)
+			logit = tcl.fully_connected(d, 1, activation_fn=None)
 
 		return logit
 
