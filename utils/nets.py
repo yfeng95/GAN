@@ -254,7 +254,7 @@ class D_conv_mnist(object):
 			
 			d = tcl.fully_connected(shared, 1, activation_fn=None, weights_initializer=tf.random_normal_initializer(0, 0.02))
 			q = tcl.fully_connected(shared, 128, activation_fn=lrelu, normalizer_fn=tcl.batch_norm)
-			q = tcl.fully_connected(q, 2, activation_fn=None) # 10 classes
+			q = tcl.fully_connected(q, 10, activation_fn=None) # 10 classes
 			return d, q
 	@property
 	def vars(self):
